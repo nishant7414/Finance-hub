@@ -6,6 +6,10 @@ import { formatCurrency, formatDisplayDate } from '../utils/formatters'
 const PIE_COLORS = ['#0f766e', '#f97316', '#2563eb', '#eab308', '#334155', '#14b8a6']
 
 const chartTooltipFormatter = (value) => formatCurrency(value)
+const compactNumberFormatter = new Intl.NumberFormat('en-IN', {
+  notation: 'compact',
+  maximumFractionDigits: 1,
+})
 
 const BalanceTrendChart = lazy(async () => {
   const [
@@ -33,10 +37,11 @@ const BalanceTrendChart = lazy(async () => {
             tickFormatter={(value) => formatDisplayDate(value).split(',')[0]}
             tickLine={false}
             axisLine={false}
+            minTickGap={24}
             tick={{ fill: palette.axisColor, fontSize: 12 }}
           />
           <YAxis
-            tickFormatter={(value) => `${Math.round(value / 1000)}k`}
+            tickFormatter={(value) => compactNumberFormatter.format(value)}
             tickLine={false}
             axisLine={false}
             tick={{ fill: palette.axisColor, fontSize: 12 }}
@@ -90,8 +95,8 @@ const SpendingPieChart = lazy(async () => {
             data={data}
             dataKey="value"
             nameKey="name"
-            innerRadius={68}
-            outerRadius={95}
+            innerRadius="42%"
+            outerRadius="68%"
             paddingAngle={3}
           >
             {data.map((entry, index) => (
@@ -140,8 +145,8 @@ export default function Charts({ balanceData, spendingData, canCreateTransaction
   }
 
   return (
-    <section className="grid gap-6 xl:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
-      <article className="panel p-5 sm:p-6">
+    <section className="grid gap-4 lg:gap-6 xl:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
+      <article className="panel min-w-0 p-5 sm:p-6">
         <div className="mb-5">
           <span className="eyebrow">Balance trend</span>
           <h2 className="mt-3 text-xl font-semibold text-slate-950 dark:text-slate-50">
@@ -162,7 +167,7 @@ export default function Charts({ balanceData, spendingData, canCreateTransaction
           />
         ) : (
           <div className="rounded-[24px] bg-slate-50/70 p-2 dark:bg-slate-950/50">
-            <div className="h-[290px]">
+            <div className="h-[240px] sm:h-[280px] lg:h-[290px]">
               <Suspense fallback={<ChartFallback />}>
                 <BalanceTrendChart data={balanceData} palette={chartPalette} />
               </Suspense>
@@ -171,7 +176,7 @@ export default function Charts({ balanceData, spendingData, canCreateTransaction
         )}
       </article>
 
-      <article className="panel p-5 sm:p-6">
+      <article className="panel min-w-0 p-5 sm:p-6">
         <div>
           <span className="eyebrow">Spend mix</span>
           <h2 className="mt-3 text-xl font-semibold text-slate-950 dark:text-slate-50">
@@ -194,7 +199,7 @@ export default function Charts({ balanceData, spendingData, canCreateTransaction
           </div>
         ) : (
           <div className="mt-4 rounded-[24px] bg-slate-50/70 p-2 dark:bg-slate-950/50">
-            <div className="h-[290px]">
+            <div className="h-[240px] sm:h-[280px] lg:h-[290px]">
               <Suspense fallback={<ChartFallback />}>
                 <SpendingPieChart data={spendingData} palette={chartPalette} />
               </Suspense>

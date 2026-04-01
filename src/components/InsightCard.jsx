@@ -9,7 +9,7 @@ const toneStyles = {
 export default function InsightCard({ title, value, description, amount, tone }) {
   return (
     <article
-      className={`rounded-3xl border p-5 transition duration-200 hover:-translate-y-0.5 ${
+      className={`h-full rounded-3xl border p-5 transition duration-200 hover:-translate-y-0.5 ${
         toneStyles[tone] ?? toneStyles.slate
       }`}
     >
@@ -17,7 +17,7 @@ export default function InsightCard({ title, value, description, amount, tone })
         Insight
       </p>
       <h3 className="mt-3 text-lg font-semibold text-slate-900 dark:text-slate-100">{title}</h3>
-      <p className="mt-4 font-display text-3xl font-bold text-slate-950 dark:text-slate-50">
+      <p className="mt-4 break-words font-display text-2xl font-bold text-slate-950 dark:text-slate-50 sm:text-3xl">
         {value}
       </p>
       <p className="mt-3 text-sm leading-6 text-slate-500 dark:text-slate-400">{description}</p>

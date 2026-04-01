@@ -8,7 +8,7 @@ export default function EmptyState({
   return (
     <div
       className={`flex flex-col items-start justify-center rounded-3xl border border-dashed border-slate-300/90 bg-slate-50/70 dark:border-slate-700 dark:bg-slate-950/50 ${
-        compact ? 'p-5' : 'p-8'
+        compact ? 'p-4 sm:p-5' : 'p-6 sm:p-8'
       }`}
     >
       <span className="mb-3 inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-white text-lg shadow-sm dark:bg-slate-900 dark:text-slate-200">

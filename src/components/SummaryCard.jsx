@@ -6,11 +6,11 @@ export default function SummaryCard({ title, value, subtitle, accent }) {
   }
 
   return (
-    <article className="panel p-5 sm:p-6">
-      <div className="flex items-start justify-between gap-4">
+    <article className="panel h-full p-5 sm:p-6">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <p className="text-sm font-medium text-slate-500 dark:text-slate-400">{title}</p>
-          <p className="mt-3 font-display text-3xl font-bold tracking-tight text-slate-950 dark:text-slate-50">
+          <p className="mt-3 break-words font-display text-2xl font-bold tracking-tight text-slate-950 dark:text-slate-50 sm:text-3xl">
             {value}
           </p>
         </div>

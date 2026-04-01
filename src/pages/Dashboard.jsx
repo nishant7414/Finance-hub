@@ -71,9 +71,9 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen px-4 py-5 sm:px-6 sm:py-6 lg:px-8">
+    <div className="min-h-screen px-3 py-4 sm:px-6 sm:py-6 lg:px-8">
       <div className="mx-auto max-w-7xl">
-        <div className="grid gap-6 lg:grid-cols-[290px_minmax(0,1fr)]">
+        <div className="grid gap-4 lg:gap-6 xl:grid-cols-[320px_minmax(0,1fr)]">
           <Sidebar
             role={role}
             onRoleChange={setRole}
@@ -82,12 +82,12 @@ export default function Dashboard() {
             transactionCount={transactions.length}
           />
 
-          <main className="space-y-6">
-            <section className="panel overflow-hidden p-6 sm:p-8">
+          <main className="min-w-0 space-y-4 sm:space-y-6">
+            <section className="panel overflow-hidden p-5 sm:p-8">
               <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_260px] xl:items-end">
                 <div>
                   <span className="eyebrow">Dashboard overview</span>
-                  <h2 className="mt-4 max-w-2xl font-display text-4xl font-bold tracking-tight text-slate-950 dark:text-slate-50">
+                  <h2 className="mt-4 max-w-2xl font-display text-3xl font-bold tracking-tight text-slate-950 dark:text-slate-50 sm:text-4xl">
                     Clear finance signals, without the clutter.
                   </h2>
                   <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-500 dark:text-slate-400 sm:text-base">
@@ -96,7 +96,7 @@ export default function Dashboard() {
                   </p>
                 </div>
 
-                <div className="rounded-[28px] border border-aurora/10 bg-gradient-to-br from-aurora/10 via-white to-ember/10 p-5 dark:border-aurora/20 dark:from-aurora/15 dark:via-slate-900 dark:to-ember/10">
+                <div className="rounded-[24px] border border-aurora/10 bg-gradient-to-br from-aurora/10 via-white to-ember/10 p-5 dark:border-aurora/20 dark:from-aurora/15 dark:via-slate-900 dark:to-ember/10 sm:rounded-[28px]">
                   <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500 dark:text-slate-400">
                     Latest insight
                   </p>

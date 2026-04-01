@@ -10,7 +10,7 @@ export default function RoleSwitcher({ role, onChange }) {
 
   return (
     <div className="panel-muted p-2">
-      <div className="mb-4 flex items-start justify-between gap-3">
+      <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-400 dark:text-slate-500">
             Access
@@ -23,7 +23,7 @@ export default function RoleSwitcher({ role, onChange }) {
         <button
           type="button"
           onClick={toggleTheme}
-          className="rounded-2xl border border-slate-200/90 bg-white/90 px-3 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-700 transition hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200 dark:hover:bg-slate-900"
+          className="w-full rounded-2xl border border-slate-200/90 bg-white/90 px-3 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-700 transition hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200 dark:hover:bg-slate-900 sm:w-auto"
         >
           {theme === 'dark' ? 'Light mode' : 'Dark mode'}
         </button>

@@ -28,6 +28,7 @@ html.dark {
   body {
     @apply font-sans text-slate-900 antialiased dark:text-slate-100;
     min-height: 100vh;
+    overflow-x: hidden;
     background:
       radial-gradient(circle at top left, rgba(15, 118, 110, 0.14), transparent 28%),
       radial-gradient(circle at top right, rgba(249, 115, 22, 0.14), transparent 32%),
@@ -43,16 +44,17 @@ html.dark {
 
   #root {
     min-height: 100vh;
+    overflow-x: clip;
   }
 }
 
 @layer components {
   .panel {
-    @apply rounded-[28px] border border-white/80 bg-white/80 shadow-panel backdrop-blur dark:border-slate-800/80 dark:bg-slate-900/80;
+    @apply rounded-[24px] border border-white/80 bg-white/80 shadow-panel backdrop-blur dark:border-slate-800/80 dark:bg-slate-900/80 sm:rounded-[28px];
   }
 
   .panel-muted {
-    @apply rounded-3xl border border-slate-200/80 bg-white/65 backdrop-blur dark:border-slate-700/80 dark:bg-slate-950/70;
+    @apply rounded-[24px] border border-slate-200/80 bg-white/65 backdrop-blur dark:border-slate-700/80 dark:bg-slate-950/70 sm:rounded-3xl;
   }
 
   .eyebrow {
@@ -68,6 +70,6 @@ html.dark {
   }
 
   .chart-fallback {
-    @apply h-[290px] animate-pulse rounded-[24px] bg-slate-100/80 dark:bg-slate-800/60;
+    @apply h-[240px] animate-pulse rounded-[24px] bg-slate-100/80 dark:bg-slate-800/60 sm:h-[290px];
   }
 }

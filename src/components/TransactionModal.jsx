@@ -58,9 +58,10 @@ export default function TransactionModal({
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/45 px-4 py-6 backdrop-blur-sm">
-      <div className="panel w-full max-w-2xl p-6 sm:p-7">
-        <div className="flex items-start justify-between gap-4">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-950/45 px-3 py-3 backdrop-blur-sm sm:px-4 sm:py-6">
+      <div className="flex min-h-full items-start justify-center sm:items-center">
+        <div className="panel w-full max-w-2xl max-h-[calc(100vh-1.5rem)] overflow-y-auto p-4 sm:p-7">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div>
             <span className="eyebrow">{mode === 'edit' ? 'Update entry' : 'New entry'}</span>
             <h2 className="mt-3 text-2xl font-semibold text-slate-950 dark:text-slate-50">
@@ -74,13 +75,13 @@ export default function TransactionModal({
           <button
             type="button"
             onClick={onClose}
-            className="rounded-2xl bg-slate-100 px-3 py-2 text-sm font-semibold text-slate-600 transition hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
+            className="w-full rounded-2xl bg-slate-100 px-3 py-2 text-sm font-semibold text-slate-600 transition hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700 sm:w-auto"
           >
             Close
           </button>
-        </div>
+          </div>
 
-        <form onSubmit={handleSubmit} className="mt-6 grid gap-4 sm:grid-cols-2">
+          <form onSubmit={handleSubmit} className="mt-5 grid gap-4 sm:mt-6 sm:grid-cols-2">
           <label className="space-y-2">
             <span className="text-sm font-semibold text-slate-700 dark:text-slate-200">Date</span>
             <input
@@ -155,18 +156,19 @@ export default function TransactionModal({
             <button
               type="button"
               onClick={onClose}
-              className="action-button border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200 dark:hover:bg-slate-900"
+              className="action-button w-full border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200 dark:hover:bg-slate-900 sm:w-auto"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="action-button bg-slate-900 text-white hover:bg-slate-800 dark:bg-aurora dark:hover:bg-teal-500"
+              className="action-button w-full bg-slate-900 text-white hover:bg-slate-800 dark:bg-aurora dark:hover:bg-teal-500 sm:w-auto"
             >
               {mode === 'edit' ? 'Save changes' : 'Create transaction'}
             </button>
           </div>
-        </form>
+          </form>
+        </div>
       </div>
     </div>
   )
