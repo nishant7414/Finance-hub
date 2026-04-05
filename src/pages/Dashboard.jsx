@@ -1,186 +1,210 @@
-import { useMemo, useState } from 'react'
+import { motion } from 'framer-motion'
+import { useMemo } from 'react'
+import { Link } from 'react-router-dom'
 import Charts from '../components/Charts'
-import InsightCard from '../components/InsightCard'
-import Sidebar from '../components/Sidebar'
 import SummaryCard from '../components/SummaryCard'
-import TransactionModal from '../components/TransactionModal'
-import TransactionTable from '../components/TransactionTable'
+import { useTransactionModalActions } from '../components/AppShell'
 import { useFinance } from '../context/FinanceContext'
-import { formatCurrency } from '../utils/formatters'
+import { formatCurrency, formatDisplayDate } from '../utils/formatters'
+import { cardHover, fadeUp, rowHover, sectionStagger, springTransition } from '../utils/motion'
+
+const getTrendTone = (value) => (value > 0 ? 'positive' : value < 0 ? 'negative' : 'neutral')
+
+const formatTrend = (value) => {
+  const rounded = Math.round(value * 10) / 10
+  const decimals = Number.isInteger(rounded) ? 0 : 1
+  const sign = rounded > 0 ? '+' : ''
+
+  return `${sign}${rounded.toFixed(decimals)}%`
+}
 
 export default function Dashboard() {
   const {
-    totals,
-    filters,
-    filteredTransactions,
-    transactions,
-    role,
-    setRole,
-    updateFilter,
-    resetFilters,
-    addTransaction,
-    updateTransaction,
-    deleteTransaction,
-    balanceHistory,
-    spendingBreakdown,
     insights,
+    overviewBalanceHistory,
+    recentTransactions,
+    role,
+    spendingBreakdown,
+    totals,
   } = useFinance()
+  const { openCreateModal } = useTransactionModalActions()
 
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const [editingTransaction, setEditingTransaction] = useState(null)
+  const summaryCards = useMemo(() => {
+    const current = insights.monthlyComparison.current
+    const previous = insights.monthlyComparison.previous
+    const currentBalance = overviewBalanceHistory.at(-1)?.balance ?? totals.balance
+    const previousBalance = overviewBalanceHistory.at(-2)?.balance ?? currentBalance
+    const balanceChange =
+      previousBalance === 0
+        ? currentBalance === 0
+          ? 0
+          : 100
+        : ((currentBalance - previousBalance) / Math.abs(previousBalance)) * 100
+    const expenseTrend = -insights.monthlyComparison.expenseChange
 
-  const monthlyMessage = useMemo(() => {
-    const comparison = insights.monthlyComparison
-
-    if (comparison.previousTotal === 0 && comparison.currentTotal === 0) {
-      return 'No monthly expense movement yet.'
-    }
-
-    if (comparison.previousTotal === 0) {
-      return `Spending increased by ${comparison.percentageChange}% from a zero baseline.`
-    }
-
-    return `Spending ${comparison.direction} by ${Math.abs(
-      comparison.percentageChange,
-    )}% compared with last month.`
-  }, [insights.monthlyComparison])
-
-  const closeModal = () => {
-    setEditingTransaction(null)
-    setIsModalOpen(false)
-  }
-
-  const openCreateModal = () => {
-    setEditingTransaction(null)
-    setIsModalOpen(true)
-  }
-
-  const handleEditTransaction = (transaction) => {
-    setEditingTransaction(transaction)
-    setIsModalOpen(true)
-  }
-
-  const handleSubmitTransaction = (payload) => {
-    if (editingTransaction) {
-      updateTransaction(editingTransaction.id, payload)
-    } else {
-      addTransaction(payload)
-    }
-
-    closeModal()
-  }
+    return [
+      {
+        title: 'Total Balance',
+        value: formatCurrency(totals.balance),
+        subtitle: 'Your net position across all tracked income and expense records.',
+        icon: 'balance',
+        trendLabel: formatTrend(balanceChange),
+        trendTone: getTrendTone(balanceChange),
+      },
+      {
+        title: 'Monthly Income',
+        value: formatCurrency(current.income),
+        subtitle: 'Income booked in the current month compared with last month.',
+        icon: 'income',
+        trendLabel: formatTrend(insights.monthlyComparison.incomeChange),
+        trendTone: getTrendTone(insights.monthlyComparison.incomeChange),
+      },
+      {
+        title: 'Monthly Expenses',
+        value: formatCurrency(current.expenses),
+        subtitle: 'Expense movement this month with healthier drops treated as positive.',
+        icon: 'expense',
+        trendLabel: formatTrend(expenseTrend),
+        trendTone: getTrendTone(expenseTrend),
+      },
+      {
+        title: 'Savings Rate',
+        value: `${insights.savingsRate}%`,
+        subtitle: 'Current-month savings rate based on income versus expenses.',
+        icon: 'rate',
+        trendLabel: formatTrend(insights.monthlyComparison.savingsRateChange),
+        trendTone: getTrendTone(insights.monthlyComparison.savingsRateChange),
+      },
+    ]
+  }, [insights, overviewBalanceHistory, totals.balance])
 
   return (
-    <div className="min-h-screen px-3 py-4 sm:px-6 sm:py-6 lg:px-8">
-      <div className="mx-auto max-w-7xl">
-        <div className="grid gap-4 lg:gap-6 xl:grid-cols-[320px_minmax(0,1fr)]">
-          <Sidebar
-            role={role}
-            onRoleChange={setRole}
-            onAddTransaction={openCreateModal}
-            totalBalance={totals.balance}
-            transactionCount={transactions.length}
-          />
+    <motion.div initial="hidden" animate="visible" variants={sectionStagger(0.04)} className="space-y-6">
+      <motion.section variants={sectionStagger(0.02)} className="grid gap-4 md:grid-cols-2 2xl:grid-cols-4">
+        {summaryCards.map((card) => (
+          <SummaryCard key={card.title} {...card} />
+        ))}
+      </motion.section>
 
-          <main className="min-w-0 space-y-4 sm:space-y-6">
-            <section className="panel overflow-hidden p-5 sm:p-8">
-              <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_260px] xl:items-end">
-                <div>
-                  <span className="eyebrow">Dashboard overview</span>
-                  <h2 className="mt-4 max-w-2xl font-display text-3xl font-bold tracking-tight text-slate-950 dark:text-slate-50 sm:text-4xl">
-                    Clear finance signals, without the clutter.
-                  </h2>
-                  <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-500 dark:text-slate-400 sm:text-base">
-                    Watch balance movement, inspect category pressure, and manage
-                    transactions from one clean workspace.
-                  </p>
-                </div>
+      <Charts
+        balanceData={overviewBalanceHistory}
+        spendingData={spendingBreakdown}
+        canCreateTransaction={role === 'admin'}
+        onAdd={openCreateModal}
+      />
 
-                <div className="rounded-[24px] border border-aurora/10 bg-gradient-to-br from-aurora/10 via-white to-ember/10 p-5 dark:border-aurora/20 dark:from-aurora/15 dark:via-slate-900 dark:to-ember/10 sm:rounded-[28px]">
-                  <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-500 dark:text-slate-400">
-                    Latest insight
-                  </p>
-                  <p className="mt-3 text-lg font-semibold text-slate-900 dark:text-slate-100">
-                    {monthlyMessage}
-                  </p>
-                  <p className="mt-3 text-sm text-slate-500 dark:text-slate-400">
-                    Highest spend is currently in{' '}
-                    <span className="font-semibold text-slate-800 dark:text-slate-200">
-                      {insights.highestCategory.category}
-                    </span>
-                    .
-                  </p>
-                </div>
-              </div>
-            </section>
+      <motion.section variants={sectionStagger(0.08)} className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+        <motion.article
+          variants={fadeUp}
+          whileHover={cardHover}
+          transition={springTransition}
+          className="panel p-5 will-change-transform sm:p-6"
+        >
+          <p className="section-label">Highlight</p>
+          <h2 className="mt-2 text-2xl font-semibold tracking-tight text-slate-950 dark:text-white">
+            Highest Spending Category
+          </h2>
 
-            <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-              <SummaryCard
-                title="Total Balance"
-                value={formatCurrency(totals.balance)}
-                subtitle="Net position after subtracting all expenses from income."
-                accent="teal"
-              />
-              <SummaryCard
-                title="Total Income"
-                value={formatCurrency(totals.income)}
-                subtitle="All incoming cash flow tracked across salary, freelance, and dividends."
-                accent="slate"
-              />
-              <SummaryCard
-                title="Total Expenses"
-                value={formatCurrency(totals.expenses)}
-                subtitle="Every outgoing transaction grouped into your tracked categories."
-                accent="amber"
-              />
-            </section>
-
-            <Charts
-              balanceData={balanceHistory}
-              spendingData={spendingBreakdown}
-              canCreateTransaction={role === 'admin'}
-              onAdd={openCreateModal}
-            />
-
-            <section className="panel p-5 sm:p-6">
+          <div className="mt-6 rounded-[24px] border border-slate-200/70 bg-slate-50/80 p-5 dark:border-white/10 dark:bg-slate-950/60">
+            <div className="flex flex-wrap items-center justify-between gap-4">
               <div>
-                <span className="eyebrow">Insights</span>
-                <h2 className="mt-3 text-xl font-semibold text-slate-950 dark:text-slate-50">
-                  Smart signals
-                </h2>
-                <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
-                  Dynamic highlights generated directly from the transaction data.
+                <span className="inline-flex rounded-full bg-rose-500/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-rose-500 dark:bg-rose-500/20 dark:text-rose-300">
+                  Top Expense Driver
+                </span>
+                <p className="mt-4 text-3xl font-bold tracking-tight text-slate-950 dark:text-white">
+                  {insights.highestCategory.category}
                 </p>
               </div>
 
-              <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-                {insights.cards.map((card) => (
-                  <InsightCard key={card.id} {...card} />
-                ))}
+              <div className="text-right">
+                <p className="text-sm text-slate-500 dark:text-slate-400">Share of total spend</p>
+                <p className="mt-2 text-2xl font-bold tracking-tight text-slate-950 dark:text-white">
+                  {insights.highestCategoryShare}%
+                </p>
               </div>
-            </section>
+            </div>
 
-            <TransactionTable
-              transactions={filteredTransactions}
-              filters={filters}
-              onFilterChange={updateFilter}
-              onResetFilters={resetFilters}
-              role={role}
-              onEdit={handleEditTransaction}
-              onDelete={deleteTransaction}
-              onCreate={openCreateModal}
-            />
-          </main>
-        </div>
-      </div>
+            <div className="mt-6 flex items-end justify-between gap-4">
+              <div>
+                <p className="section-label">Amount</p>
+                <p className="mt-2 text-2xl font-semibold text-slate-950 dark:text-white">
+                  {formatCurrency(insights.highestCategory.amount)}
+                </p>
+              </div>
 
-      <TransactionModal
-        isOpen={isModalOpen}
-        mode={editingTransaction ? 'edit' : 'create'}
-        initialValues={editingTransaction}
-        onClose={closeModal}
-        onSubmit={handleSubmitTransaction}
-      />
-    </div>
+              <Link
+                to="/insights"
+                className="inline-flex items-center rounded-2xl border border-slate-200/80 bg-white/90 px-4 py-2.5 text-sm font-semibold text-slate-600 transition duration-200 hover:bg-white dark:border-white/10 dark:bg-slate-900/70 dark:text-slate-200 dark:hover:bg-slate-900"
+              >
+                View insights
+              </Link>
+            </div>
+          </div>
+
+          <div className="mt-6 flex flex-wrap gap-2">
+            {insights.topCategories.map((category) => (
+              <span
+                key={category.category}
+                className="rounded-full border border-slate-200/80 bg-slate-100/90 px-3 py-1 text-xs font-semibold uppercase tracking-[0.12em] text-slate-500 dark:border-white/10 dark:bg-slate-900/70 dark:text-slate-300"
+              >
+                {category.category}
+              </span>
+            ))}
+          </div>
+        </motion.article>
+
+        <motion.article
+          variants={fadeUp}
+          whileHover={cardHover}
+          transition={springTransition}
+          className="panel p-5 will-change-transform sm:p-6"
+        >
+          <div className="flex items-center justify-between gap-4">
+            <div>
+              <p className="section-label">Activity</p>
+              <h2 className="mt-2 text-2xl font-semibold tracking-tight text-slate-950 dark:text-white">
+                Recent Transactions
+              </h2>
+            </div>
+
+            <Link
+              to="/transactions"
+              className="inline-flex items-center rounded-2xl border border-slate-200/80 bg-white/90 px-4 py-2.5 text-sm font-semibold text-slate-600 transition duration-200 hover:bg-white dark:border-white/10 dark:bg-slate-900/70 dark:text-slate-200 dark:hover:bg-slate-900"
+            >
+              Open ledger
+            </Link>
+          </div>
+
+          <div className="mt-6 space-y-3">
+            {recentTransactions.map((transaction) => (
+              <motion.div
+                key={transaction.id}
+                whileHover={rowHover}
+                transition={springTransition}
+                className="flex items-center justify-between gap-3 rounded-[22px] border border-slate-200/70 bg-slate-50/80 px-4 py-3 will-change-transform dark:border-white/10 dark:bg-slate-950/60"
+              >
+                <div className="min-w-0">
+                  <p className="truncate text-sm font-semibold text-slate-950 dark:text-white">
+                    {transaction.description || transaction.category}
+                  </p>
+                  <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+                    {transaction.category} � {formatDisplayDate(transaction.date)}
+                  </p>
+                </div>
+                <p
+                  className={`shrink-0 text-sm font-semibold ${
+                    transaction.type === 'income'
+                      ? 'text-emerald-500 dark:text-emerald-300'
+                      : 'text-rose-500 dark:text-rose-300'
+                  }`}
+                >
+                  {formatCurrency(transaction.amount)}
+                </p>
+              </motion.div>
+            ))}
+          </div>
+        </motion.article>
+      </motion.section>
+    </motion.div>
   )
 }
