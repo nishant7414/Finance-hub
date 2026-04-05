@@ -1,6 +1,3 @@
-Here you go — clean, fully copyable Markdown 👇
-
-````markdown
 # Zorvyn – Finance Hub
 
 A clean, modern **Finance Dashboard UI** built using React, Vite, Tailwind CSS, and Recharts.
@@ -144,7 +141,6 @@ src/
     insights.js
   App.jsx
   main.jsx
-````
 
 ---
 
