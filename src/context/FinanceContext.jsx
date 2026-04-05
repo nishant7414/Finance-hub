@@ -1,10 +1,10 @@
-import {
+﻿import {
   createContext,
   useContext,
   useDeferredValue,
   useEffect,
   useMemo,
-  useState,
+  useReducer,
 } from 'react'
 import { mockTransactions } from '../data/mockData'
 import { generateInsights } from '../utils/insights'
@@ -19,7 +19,9 @@ const STORAGE_KEYS = {
 
 const defaultFilters = {
   search: '',
+  category: [],
   type: 'all',
+  dateRange: 'all',
   sortBy: 'date-desc',
 }
 
@@ -48,16 +50,31 @@ const getInitialTheme = () => {
     return storedTheme
   }
 
-  if (
-    typeof window !== 'undefined' &&
-    window.matchMedia &&
-    window.matchMedia('(prefers-color-scheme: dark)').matches
-  ) {
-    return 'dark'
+  return 'dark'
+}
+
+const getInitialTransactions = () => {
+  const storedTransactions = readStorage(STORAGE_KEYS.transactions, null)
+
+  if (!Array.isArray(storedTransactions)) {
+    return sortTransactions(mockTransactions, 'date-desc')
   }
 
-  return 'light'
+  const mergedTransactions = new Map(mockTransactions.map((transaction) => [transaction.id, transaction]))
+
+  storedTransactions.forEach((transaction) => {
+    mergedTransactions.set(transaction.id, transaction)
+  })
+
+  return sortTransactions([...mergedTransactions.values()], 'date-desc')
 }
+
+const getInitialState = () => ({
+  transactions: getInitialTransactions(),
+  role: readStorage(STORAGE_KEYS.role, 'admin'),
+  theme: getInitialTheme(),
+  filters: defaultFilters,
+})
 
 const createTransactionId = () =>
   typeof crypto !== 'undefined' && crypto.randomUUID
@@ -86,24 +103,6 @@ const sortTransactions = (transactions, sortBy) => {
   return sorted
 }
 
-const getBalanceHistory = (transactions) => {
-  const ascending = [...transactions].sort(
-    (left, right) => new Date(left.date) - new Date(right.date),
-  )
-
-  let runningBalance = 0
-
-  return ascending.map((transaction) => {
-    runningBalance += transaction.type === 'income' ? transaction.amount : -transaction.amount
-
-    return {
-      date: transaction.date,
-      balance: runningBalance,
-      label: `${transaction.category} - ${transaction.date}`,
-    }
-  })
-}
-
 const getSpendingBreakdown = (transactions) => {
   const categoryTotals = transactions.reduce((accumulator, transaction) => {
     if (transaction.type !== 'expense') {
@@ -121,34 +120,135 @@ const getSpendingBreakdown = (transactions) => {
     .sort((left, right) => right.value - left.value)
 }
 
+const isWithinDateRange = (dateValue, dateRange) => {
+  if (dateRange === 'all') {
+    return true
+  }
+
+  const transactionDate = new Date(dateValue)
+  const now = new Date()
+
+  if (dateRange === '30d') {
+    const start = new Date(now)
+    start.setDate(now.getDate() - 30)
+    return transactionDate >= start
+  }
+
+  if (dateRange === '90d') {
+    const start = new Date(now)
+    start.setDate(now.getDate() - 90)
+    return transactionDate >= start
+  }
+
+  if (dateRange === '6m') {
+    const start = new Date(now.getFullYear(), now.getMonth() - 5, 1)
+    return transactionDate >= start
+  }
+
+  return true
+}
+
+const financeReducer = (state, action) => {
+  switch (action.type) {
+    case 'SET_ROLE':
+      return {
+        ...state,
+        role: action.payload,
+      }
+    case 'SET_THEME':
+      return {
+        ...state,
+        theme: action.payload,
+      }
+    case 'UPDATE_FILTER':
+      return {
+        ...state,
+        filters: {
+          ...state.filters,
+          [action.payload.key]: action.payload.value,
+        },
+      }
+    case 'TOGGLE_CATEGORY': {
+      const currentCategories = state.filters.category
+      const category = action.payload
+      const nextCategories = currentCategories.includes(category)
+        ? currentCategories.filter((value) => value !== category)
+        : [...currentCategories, category]
+
+      return {
+        ...state,
+        filters: {
+          ...state.filters,
+          category: nextCategories,
+        },
+      }
+    }
+    case 'RESET_FILTERS':
+      return {
+        ...state,
+        filters: defaultFilters,
+      }
+    case 'ADD_TRANSACTION':
+      return {
+        ...state,
+        transactions: sortTransactions(
+          [
+            {
+              id: createTransactionId(),
+              ...action.payload,
+            },
+            ...state.transactions,
+          ],
+          'date-desc',
+        ),
+      }
+    case 'UPDATE_TRANSACTION':
+      return {
+        ...state,
+        transactions: sortTransactions(
+          state.transactions.map((transaction) =>
+            transaction.id === action.payload.id
+              ? { ...transaction, ...action.payload.values }
+              : transaction,
+          ),
+          'date-desc',
+        ),
+      }
+    case 'DELETE_TRANSACTION':
+      return {
+        ...state,
+        transactions: state.transactions.filter(
+          (transaction) => transaction.id !== action.payload,
+        ),
+      }
+    default:
+      return state
+  }
+}
+
 export function FinanceProvider({ children }) {
-  const [transactions, setTransactions] = useState(() =>
-    readStorage(STORAGE_KEYS.transactions, mockTransactions),
-  )
-  const [filters, setFilters] = useState(defaultFilters)
-  const [role, setRole] = useState(() => readStorage(STORAGE_KEYS.role, 'admin'))
-  const [theme, setTheme] = useState(getInitialTheme)
-  const deferredSearch = useDeferredValue(filters.search.trim().toLowerCase())
+  const [state, dispatch] = useReducer(financeReducer, undefined, getInitialState)
+  const deferredSearch = useDeferredValue(state.filters.search.trim().toLowerCase())
 
   useEffect(() => {
-    window.localStorage.setItem(STORAGE_KEYS.transactions, JSON.stringify(transactions))
-  }, [transactions])
+    window.localStorage.setItem(STORAGE_KEYS.transactions, JSON.stringify(state.transactions))
+  }, [state.transactions])
 
   useEffect(() => {
-    window.localStorage.setItem(STORAGE_KEYS.role, JSON.stringify(role))
-  }, [role])
+    window.localStorage.setItem(STORAGE_KEYS.role, JSON.stringify(state.role))
+  }, [state.role])
 
   useEffect(() => {
     const rootElement = window.document.documentElement
 
-    rootElement.classList.toggle('dark', theme === 'dark')
-    rootElement.style.colorScheme = theme
-    window.localStorage.setItem(STORAGE_KEYS.theme, JSON.stringify(theme))
-  }, [theme])
+    rootElement.classList.toggle('dark', state.theme === 'dark')
+    rootElement.style.colorScheme = state.theme
+    window.localStorage.setItem(STORAGE_KEYS.theme, JSON.stringify(state.theme))
+  }, [state.theme])
 
   const totals = useMemo(
     () =>
-      transactions.reduce(
+      state.transactions.reduce(
         (summary, transaction) => {
           if (transaction.type === 'income') {
             summary.income += transaction.amount
@@ -162,93 +262,130 @@ export function FinanceProvider({ children }) {
         },
         { balance: 0, income: 0, expenses: 0 },
       ),
-    [transactions],
+    [state.transactions],
+  )
+
+  const availableCategories = useMemo(
+    () => [...new Set(state.transactions.map((transaction) => transaction.category))].sort(),
+    [state.transactions],
   )
 
   const filteredTransactions = useMemo(() => {
-    const matchingTransactions = transactions.filter((transaction) => {
+    const matchingTransactions = state.transactions.filter((transaction) => {
+      const matchesSearch = deferredSearch
+        ? (transaction.description ?? '').toLowerCase().includes(deferredSearch)
+        : true
       const matchesType =
-        filters.type === 'all' ? true : transaction.type === filters.type
-      const searchTarget =
-        `${transaction.category} ${transaction.description} ${transaction.type}`.toLowerCase()
-      const matchesSearch = deferredSearch ? searchTarget.includes(deferredSearch) : true
+        state.filters.type === 'all' ? true : transaction.type === state.filters.type
+      const matchesCategory =
+        state.filters.category.length === 0
+          ? true
+          : state.filters.category.includes(transaction.category)
+      const matchesDateRange = isWithinDateRange(transaction.date, state.filters.dateRange)
 
-      return matchesType && matchesSearch
+      return matchesSearch && matchesType && matchesCategory && matchesDateRange
     })
 
-    return sortTransactions(matchingTransactions, filters.sortBy)
-  }, [transactions, filters.type, filters.sortBy, deferredSearch])
+    return sortTransactions(matchingTransactions, state.filters.sortBy)
+  }, [
+    state.transactions,
+    state.filters.type,
+    state.filters.category,
+    state.filters.dateRange,
+    state.filters.sortBy,
+    deferredSearch,
+  ])
 
-  const dashboardMetrics = useMemo(
-    () => ({
-      totals,
-      balanceHistory: getBalanceHistory(transactions),
-      spendingBreakdown: getSpendingBreakdown(transactions),
-      insights: generateInsights(transactions),
-    }),
-    [transactions, totals],
+  const insights = useMemo(() => generateInsights(state.transactions), [state.transactions])
+  const spendingBreakdown = useMemo(
+    () => getSpendingBreakdown(state.transactions),
+    [state.transactions],
+  )
+  const overviewBalanceHistory = useMemo(
+    () => insights.monthlySeries.map((item) => ({ label: item.label, balance: item.balance })),
+    [insights.monthlySeries],
+  )
+  const recentTransactions = useMemo(
+    () => sortTransactions(state.transactions, 'date-desc').slice(0, 5),
+    [state.transactions],
   )
 
   const updateFilter = (key, value) => {
-    setFilters((currentFilters) => ({
-      ...currentFilters,
-      [key]: value,
-    }))
+    dispatch({
+      type: 'UPDATE_FILTER',
+      payload: { key, value },
+    })
   }
 
-  const resetFilters = () => setFilters(defaultFilters)
+  const toggleCategory = (category) => {
+    dispatch({
+      type: 'TOGGLE_CATEGORY',
+      payload: category,
+    })
+  }
+
+  const resetFilters = () => {
+    dispatch({ type: 'RESET_FILTERS' })
+  }
+
+  const setRole = (role) => {
+    dispatch({ type: 'SET_ROLE', payload: role })
+  }
+
+  const setTheme = (theme) => {
+    dispatch({ type: 'SET_THEME', payload: theme })
+  }
 
   const toggleTheme = () => {
-    setTheme((currentTheme) => (currentTheme === 'dark' ? 'light' : 'dark'))
+    setTheme(state.theme === 'dark' ? 'light' : 'dark')
   }
 
   const addTransaction = (payload) => {
-    setTransactions((currentTransactions) =>
-      sortTransactions(
-        [
-          {
-            id: createTransactionId(),
-            ...payload,
-          },
-          ...currentTransactions,
-        ],
-        'date-desc',
-      ),
-    )
+    dispatch({
+      type: 'ADD_TRANSACTION',
+      payload,
+    })
   }
 
-  const updateTransaction = (transactionId, payload) => {
-    setTransactions((currentTransactions) =>
-      sortTransactions(
-        currentTransactions.map((transaction) =>
-          transaction.id === transactionId ? { ...transaction, ...payload } : transaction,
-        ),
-        'date-desc',
-      ),
-    )
+  const updateTransaction = (transactionId, values) => {
+    dispatch({
+      type: 'UPDATE_TRANSACTION',
+      payload: {
+        id: transactionId,
+        values,
+      },
+    })
   }
 
   const deleteTransaction = (transactionId) => {
-    setTransactions((currentTransactions) =>
-      currentTransactions.filter((transaction) => transaction.id !== transactionId),
-    )
+    dispatch({
+      type: 'DELETE_TRANSACTION',
+      payload: transactionId,
+    })
   }
 
   const value = {
-    transactions,
+    transactions: state.transactions,
     filteredTransactions,
-    filters,
-    role,
+    recentTransactions,
+    filters: state.filters,
+    role: state.role,
+    theme: state.theme,
+    totals,
+    insights,
+    availableCategories,
+    spendingBreakdown,
+    monthlySeries: insights.monthlySeries,
+    overviewBalanceHistory,
+    updateFilter,
+    toggleCategory,
+    resetFilters,
     setRole,
-    theme,
     setTheme,
     toggleTheme,
-    updateFilter,
-    resetFilters,
     addTransaction,
     updateTransaction,
     deleteTransaction,
-    ...dashboardMetrics,
   }
 
   return <FinanceContext.Provider value={value}>{children}</FinanceContext.Provider>
@@ -263,3 +400,4 @@ export const useFinance = () => {
 
   return context
 }
+

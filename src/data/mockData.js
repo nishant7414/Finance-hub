@@ -1,160 +1,204 @@
-const formatDate = (date) => date.toISOString().split('T')[0]
+﻿const formatDate = (date) => date.toISOString().split('T')[0]
 
-const addDays = (date, offset) => {
-  const nextDate = new Date(date)
-  nextDate.setDate(nextDate.getDate() + offset)
-  return nextDate
-}
+const createMonthDate = (baseDate, monthOffset, day) =>
+  new Date(baseDate.getFullYear(), baseDate.getMonth() + monthOffset, day)
 
 const today = new Date()
+const monthOffsets = [-5, -4, -3, -2, -1, 0]
 
-const seedTransactions = [
+const recurringTransactions = [
   {
-    id: 'txn-1',
-    date: formatDate(addDays(today, -47)),
-    amount: 4200,
+    day: 1,
     category: 'Salary',
-    description: 'Primary salary deposit',
+    description: 'Primary salary credit',
     type: 'income',
+    baseAmount: 88750,
+    monthStep: 1200,
   },
   {
-    id: 'txn-2',
-    date: formatDate(addDays(today, -43)),
-    amount: 1240,
-    category: 'Rent',
-    description: 'Apartment rent payment',
-    type: 'expense',
-  },
-  {
-    id: 'txn-3',
-    date: formatDate(addDays(today, -39)),
-    amount: 210,
-    category: 'Insurance',
-    description: 'Health insurance premium',
-    type: 'expense',
-  },
-  {
-    id: 'txn-4',
-    date: formatDate(addDays(today, -36)),
-    amount: 540,
-    category: 'Freelance',
-    description: 'Client payment for landing page work',
-    type: 'income',
-  },
-  {
-    id: 'txn-5',
-    date: formatDate(addDays(today, -33)),
-    amount: 124,
-    category: 'Utilities',
-    description: 'Electricity and water bill',
-    type: 'expense',
-  },
-  {
-    id: 'txn-6',
-    date: formatDate(addDays(today, -30)),
-    amount: 156,
-    category: 'Shopping',
-    description: 'Home office accessories',
-    type: 'expense',
-  },
-  {
-    id: 'txn-7',
-    date: formatDate(addDays(today, -28)),
-    amount: 4200,
-    category: 'Salary',
-    description: 'Primary salary deposit',
-    type: 'income',
-  },
-  {
-    id: 'txn-8',
-    date: formatDate(addDays(today, -24)),
-    amount: 260,
-    category: 'Travel',
-    description: 'Weekend train and hotel booking',
-    type: 'expense',
-  },
-  {
-    id: 'txn-9',
-    date: formatDate(addDays(today, -19)),
-    amount: 118,
-    category: 'Groceries',
-    description: 'Monthly grocery stock-up',
-    type: 'expense',
-  },
-  {
-    id: 'txn-10',
-    date: formatDate(addDays(today, -16)),
-    amount: 76,
-    category: 'Entertainment',
-    description: 'Streaming and movie night',
-    type: 'expense',
-  },
-  {
-    id: 'txn-11',
-    date: formatDate(addDays(today, -12)),
-    amount: 320,
+    day: 3,
     category: 'Investments',
-    description: 'ETF dividend payout',
+    description: 'Portfolio dividend payout',
     type: 'income',
+    baseAmount: 12800,
+    monthStep: 450,
   },
   {
-    id: 'txn-12',
-    date: formatDate(addDays(today, -10)),
-    amount: 58,
-    category: 'Transport',
-    description: 'Fuel and metro card top-up',
+    day: 5,
+    category: 'Housing',
+    description: 'Rent and maintenance payment',
     type: 'expense',
+    baseAmount: 25000,
+    monthStep: 0,
   },
   {
-    id: 'txn-13',
-    date: formatDate(addDays(today, -8)),
-    amount: 4200,
-    category: 'Salary',
-    description: 'Primary salary deposit',
-    type: 'income',
-  },
-  {
-    id: 'txn-14',
-    date: formatDate(addDays(today, -6)),
-    amount: 132,
-    category: 'Utilities',
-    description: 'Internet and phone bill',
-    type: 'expense',
-  },
-  {
-    id: 'txn-15',
-    date: formatDate(addDays(today, -4)),
-    amount: 1240,
-    category: 'Rent',
-    description: 'Apartment rent payment',
-    type: 'expense',
-  },
-  {
-    id: 'txn-16',
-    date: formatDate(addDays(today, -2)),
-    amount: 92,
-    category: 'Groceries',
-    description: 'Fresh produce and pantry refill',
-    type: 'expense',
-  },
-  {
-    id: 'txn-17',
-    date: formatDate(addDays(today, -1)),
-    amount: 44,
-    category: 'Dining',
-    description: 'Coffee and lunch meetings',
-    type: 'expense',
-  },
-  {
-    id: 'txn-18',
-    date: formatDate(today),
-    amount: 680,
+    day: 7,
     category: 'Freelance',
-    description: 'Quick turnaround design sprint',
+    description: 'Retainer payment from design client',
     type: 'income',
+    baseAmount: 16200,
+    monthStep: 750,
+  },
+  {
+    day: 8,
+    category: 'Food & Dining',
+    description: 'Groceries and dining out',
+    type: 'expense',
+    baseAmount: 6400,
+    monthStep: 180,
+  },
+  {
+    day: 11,
+    category: 'Transport',
+    description: 'Fuel, metro, and cab rides',
+    type: 'expense',
+    baseAmount: 3100,
+    monthStep: 120,
+  },
+  {
+    day: 14,
+    category: 'Healthcare',
+    description: 'Medicines and preventive care',
+    type: 'expense',
+    baseAmount: 2400,
+    monthStep: 80,
+  },
+  {
+    day: 17,
+    category: 'Entertainment',
+    description: 'Streaming, movies, and events',
+    type: 'expense',
+    baseAmount: 2250,
+    monthStep: 110,
+  },
+  {
+    day: 20,
+    category: 'Utilities',
+    description: 'Internet, mobile, and electricity',
+    type: 'expense',
+    baseAmount: 3950,
+    monthStep: 95,
+  },
+  {
+    day: 22,
+    category: 'Insurance',
+    description: 'Health and vehicle insurance premium',
+    type: 'expense',
+    baseAmount: 1950,
+    monthStep: 70,
+  },
+  {
+    day: 24,
+    category: 'Shopping',
+    description: 'Home and personal purchases',
+    type: 'expense',
+    baseAmount: 4700,
+    monthStep: 160,
+  },
+  {
+    day: 26,
+    category: 'Subscriptions',
+    description: 'Software, cloud, and app subscriptions',
+    type: 'expense',
+    baseAmount: 1450,
+    monthStep: 65,
   },
 ]
 
-export const mockTransactions = seedTransactions.sort(
-  (left, right) => new Date(right.date) - new Date(left.date),
+const specialTransactions = [
+  {
+    monthOffset: -5,
+    day: 27,
+    category: 'Investments',
+    description: 'Quarterly bonus investment deposit',
+    type: 'income',
+    amount: 22000,
+  },
+  {
+    monthOffset: -5,
+    day: 29,
+    category: 'Housing',
+    description: 'Furniture upgrade for home office',
+    type: 'expense',
+    amount: 7800,
+  },
+  {
+    monthOffset: -4,
+    day: 27,
+    category: 'Food & Dining',
+    description: 'Festival dinner and hosting spend',
+    type: 'expense',
+    amount: 9800,
+  },
+  {
+    monthOffset: -4,
+    day: 29,
+    category: 'Shopping',
+    description: 'Seasonal wardrobe refresh',
+    type: 'expense',
+    amount: 6900,
+  },
+  {
+    monthOffset: -3,
+    day: 27,
+    category: 'Transport',
+    description: 'Outstation trip and airport transfers',
+    type: 'expense',
+    amount: 7600,
+  },
+  {
+    monthOffset: -2,
+    day: 27,
+    category: 'Healthcare',
+    description: 'Comprehensive health screening',
+    type: 'expense',
+    amount: 9100,
+  },
+  {
+    monthOffset: -1,
+    day: 27,
+    category: 'Entertainment',
+    description: 'Concert tickets and weekend events',
+    type: 'expense',
+    amount: 8400,
+  },
+  {
+    monthOffset: 0,
+    day: 27,
+    category: 'Investments',
+    description: 'Performance incentive payout',
+    type: 'income',
+    amount: 26000,
+  },
+]
+
+const generatedTransactions = monthOffsets.flatMap((monthOffset, monthIndex) =>
+  recurringTransactions.map((template, templateIndex) => ({
+    id: `txn-${monthIndex + 1}-${templateIndex + 1}`,
+    date: formatDate(createMonthDate(today, monthOffset, template.day)),
+    amount: template.baseAmount + monthIndex * template.monthStep,
+    category: template.category,
+    description: template.description,
+    type: template.type,
+  })),
 )
+
+const mockTransactions = [...generatedTransactions]
+
+specialTransactions.forEach((transaction, index) => {
+  mockTransactions.push({
+    id: `special-${index + 1}`,
+    date: formatDate(createMonthDate(today, transaction.monthOffset, transaction.day)),
+    amount: transaction.amount,
+    category: transaction.category,
+    description: transaction.description,
+    type: transaction.type,
+  })
+})
+
+export const seedSummary = {
+  transactionCount: mockTransactions.length,
+  monthsCovered: monthOffsets.length,
+}
+
+export { mockTransactions }
