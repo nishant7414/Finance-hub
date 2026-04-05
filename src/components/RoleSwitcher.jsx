@@ -1,54 +1,44 @@
-import { useFinance } from '../context/FinanceContext'
+import { motion } from 'framer-motion'
+import { buttonHover, buttonTap, springTransition } from '../utils/motion'
 
 const roles = [
   { value: 'admin', label: 'Admin' },
   { value: 'viewer', label: 'Viewer' },
 ]
 
-export default function RoleSwitcher({ role, onChange }) {
-  const { theme, toggleTheme } = useFinance()
-
+function ShieldIcon() {
   return (
-    <div className="panel-muted p-2">
-      <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.22em] text-slate-400 dark:text-slate-500">
-            Access
-          </p>
-          <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
-            Viewer can inspect. Admin can manage records.
-          </p>
-        </div>
+    <svg viewBox="0 0 24 24" fill="none" className="h-4 w-4" stroke="currentColor" strokeWidth="1.8">
+      <path d="M12 3 5 6v6c0 4.4 3 8.4 7 9 4-0.6 7-4.6 7-9V6l-7-3Z" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="m9.5 12 1.5 1.5 3.5-3.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  )
+}
 
-        <button
-          type="button"
-          onClick={toggleTheme}
-          className="w-full rounded-2xl border border-slate-200/90 bg-white/90 px-3 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-700 transition hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200 dark:hover:bg-slate-900 sm:w-auto"
-        >
-          {theme === 'dark' ? 'Light mode' : 'Dark mode'}
-        </button>
-      </div>
-
-      <div className="grid grid-cols-2 gap-2">
-        {roles.map((roleOption) => {
-          const active = role === roleOption.value
-
-          return (
-            <button
-              key={roleOption.value}
-              type="button"
-              onClick={() => onChange(roleOption.value)}
-              className={`rounded-2xl px-3 py-3 text-sm font-semibold transition ${
-                active
-                  ? 'bg-slate-900 text-white shadow-lg shadow-slate-900/15 dark:bg-aurora dark:shadow-aurora/20'
-                  : 'bg-white text-slate-600 hover:bg-slate-100 dark:bg-slate-950 dark:text-slate-300 dark:hover:bg-slate-900'
-              }`}
-            >
-              {roleOption.label}
-            </button>
-          )
-        })}
-      </div>
-    </div>
+export default function RoleSwitcher({ role, onChange }) {
+  return (
+    <motion.label
+      whileHover={buttonHover}
+      whileTap={buttonTap}
+      transition={springTransition}
+      className="group inline-flex items-center gap-2 rounded-2xl border border-slate-200/80 bg-white/90 px-3 py-2.5 text-sm text-slate-600 transition-colors duration-200 hover:bg-white dark:border-white/10 dark:bg-slate-900/70 dark:text-slate-200 dark:hover:bg-slate-900"
+    >
+      <ShieldIcon />
+      <span className="hidden text-xs font-semibold uppercase tracking-[0.2em] text-slate-400 dark:text-slate-500 sm:inline">
+        Role
+      </span>
+      <select
+        value={role}
+        onChange={(event) => onChange(event.target.value)}
+        aria-label="Switch role"
+        className="min-w-[92px] bg-transparent text-sm font-semibold text-current outline-none"
+      >
+        {roles.map((roleOption) => (
+          <option key={roleOption.value} value={roleOption.value} className="text-slate-900">
+            {roleOption.label}
+          </option>
+        ))}
+      </select>
+    </motion.label>
   )
 }
