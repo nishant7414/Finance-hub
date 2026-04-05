@@ -1,100 +1,126 @@
-# Finance Hub
+Here you go — clean, fully copyable Markdown 👇
 
-A clean, modern finance dashboard built with React, Vite, Tailwind CSS, and Recharts.
+````markdown
+# Zorvyn – Finance Hub
 
-This project focuses on a practical dashboard experience: clear balance visibility, category-based spending insights, role-based controls, dark mode, responsive layout, and a lightweight frontend architecture that is easy to extend.
+A clean, modern **Finance Dashboard UI** built using React, Vite, Tailwind CSS, and Recharts.
 
-## Highlights
+This project was developed as part of a frontend evaluation assignment to demonstrate UI design thinking, component structuring, and effective state management. The focus is on building a clear, interactive, and intuitive dashboard experience rather than a production-ready backend system.
 
-- Dashboard overview with:
-  - Total balance
-  - Total income
-  - Total expenses
-- Interactive data visualization:
-  - Balance trend line chart
-  - Category-wise spending pie chart
-- Transaction management:
-  - Search by category, description, or type
-  - Filter by income or expense
-  - Sort by date or amount
-- Frontend-only role switching:
-  - `Admin` can add, edit, and delete transactions
-  - `Viewer` has read-only access
-- Smart insights:
-  - Highest spending category
-  - Month-over-month expense comparison
-  - Savings rate summary
-- Dark mode with Tailwind `class` strategy
-- INR currency formatting across the UI
-- Local persistence with `localStorage`
-- Responsive layout with polished empty states
+---
 
-## Tech Stack
+## 🎯 Objective
 
-- React 18
-- Vite
-- Tailwind CSS
-- Recharts
-- Context API for state management
+The goal of this project is to design and implement a finance dashboard that allows users to:
 
-## Features In Detail
+* View an overall financial summary  
+* Explore and manage transactions  
+* Understand spending patterns through insights and visualizations  
 
-### 1. Dashboard Overview
+This project emphasizes **frontend architecture, UI/UX decisions, and interaction design**.
 
-The main dashboard surfaces the most important financial signals first:
+---
 
-- total balance
-- total income
-- total expenses
-- balance trend over time
-- spending distribution by category
+## ✨ Key Features
 
-### 2. Transaction Table
+### 📊 Dashboard Overview
 
-The transaction history section supports:
+* Summary cards:
+  * Total Balance  
+  * Total Income  
+  * Total Expenses  
 
-- text search
-- income/expense filtering
-- date and amount sorting
-- admin-only edit and delete actions
+* Time-based visualization:
+  * Balance trend (line chart)
 
-### 3. Role-Based UI
+* Category-based visualization:
+  * Spending breakdown (pie chart)
 
-The interface includes a role switcher for frontend permission simulation:
+---
 
-- `Admin`
-  - can add transactions
-  - can edit transactions
-  - can delete transactions
-- `Viewer`
-  - can only inspect data
-  - does not see edit controls
+### 💳 Transactions Section
 
-### 4. Insights
+* Displays:
+  * Date  
+  * Amount  
+  * Category  
+  * Type (Income/Expense)
 
-Insights are calculated dynamically from the transaction dataset and include:
+* Features:
+  * Search (category, description, type)  
+  * Filtering (income/expense)  
+  * Sorting (date, amount)
 
-- highest spending category
-- current vs last month expense comparison
-- savings rate
+---
 
-### 5. Dark Mode
+### 🔐 Role-Based UI (Frontend Simulation)
 
-Dark mode is implemented using Tailwind's `darkMode: 'class'` strategy.
+* Role switching via UI toggle:
 
-- theme preference is persisted in `localStorage`
-- the `dark` class is applied to the root HTML element
-- major surfaces support light and dark themes consistently
+  * **Admin**
+    * Add, edit, delete transactions  
 
-### 6. Chart Optimization
+  * **Viewer**
+    * Read-only access  
 
-The chart layer is optimized to keep the dashboard snappy:
+* Demonstrates conditional rendering and access control logic on frontend
 
-- Recharts is lazy-loaded
-- chart modules are imported selectively
-- Vite splits chart code into dedicated chunks
+---
 
-## Project Structure
+### 📈 Insights Section
+
+* Dynamically generated insights:
+  * Highest spending category  
+  * Month-over-month comparison  
+  * Savings rate  
+
+---
+
+### 🧠 State Management
+
+* Centralized state using **Context API**
+
+* Manages:
+  * Transactions  
+  * Filters  
+  * User role  
+  * Theme  
+
+* Keeps architecture simple yet scalable
+
+---
+
+### 🎨 UI & UX
+
+* Clean, modern dashboard layout  
+* Responsive across devices  
+* Smooth animations and micro-interactions  
+* Handles empty states gracefully  
+* Consistent visual hierarchy  
+
+---
+
+## ⚡ Enhancements Implemented
+
+* 🌙 Dark mode (Tailwind class strategy)  
+* 💾 LocalStorage persistence (transactions, role, theme)  
+* 📊 Optimized charts (lazy loading + chunk splitting)  
+* 🎬 Framer Motion animations for premium UI feel  
+* 💱 INR currency formatting  
+
+---
+
+## 🛠 Tech Stack
+
+* React (Vite)  
+* Tailwind CSS  
+* Recharts  
+* Framer Motion  
+* Context API  
+
+---
+
+## 📂 Project Structure
 
 ```text
 src/
@@ -117,16 +143,12 @@ src/
     formatters.js
     insights.js
   App.jsx
-  index.css
   main.jsx
-```
+````
 
-## Getting Started
+---
 
-### Prerequisites
-
-- Node.js 18+ recommended
-- npm
+## ⚙️ Getting Started
 
 ### Installation
 
@@ -134,19 +156,13 @@ src/
 npm install
 ```
 
-### Start Development Server
+### Run Development Server
 
 ```bash
 npm run dev
 ```
 
-Open the local Vite URL shown in the terminal, typically:
-
-```text
-http://127.0.0.1:5173
-```
-
-### Create Production Build
+### Build for Production
 
 ```bash
 npm run build
@@ -158,40 +174,65 @@ npm run build
 npm run preview
 ```
 
-## State Management
+---
 
-The app uses a single Context-based store in `FinanceContext.jsx` to manage:
+## 🧪 Approach
 
-- transactions
-- filters
-- active role
-- theme
-- derived dashboard metrics
+This project was built with the following approach:
 
-This keeps the codebase simple and scalable without introducing unnecessary abstraction.
+* Focus on **clarity over complexity**
+* Break UI into **reusable components**
+* Keep state management **simple and centralized**
+* Use **mock data** to simulate real-world scenarios
+* Prioritize **user experience and readability**
 
-## Data & Persistence
+---
 
-- mock transactions are seeded from `src/data/mockData.js`
-- transaction edits are persisted in `localStorage`
-- role and theme preferences are also persisted in `localStorage`
+## 💡 Key Design Decisions
 
-## Currency
+* Chose **Context API over Redux** to keep the project lightweight, reduce boilerplate, and maintain ease of understanding for a scoped application
+* Selected **Recharts** for its quick integration, composability, and flexibility in building custom-styled visualizations
+* Prioritized **UI clarity and usability** instead of introducing unnecessary architectural complexity
+* Designed **dark mode early** to ensure visual consistency and avoid retrofitting styles later in development
 
-The dashboard is currently configured to display all monetary values in `INR`.
+---
 
-## Build Status
+## ⚠️ Current Limitations
 
-The app builds successfully with Vite production build output.
+* Data is persisted using **localStorage**, which resets if browser data is cleared
+* Insights are based on **basic derived calculations** and can be extended with more advanced analytics logic
 
-## Possible Next Improvements
+---
 
-- backend integration for real transaction data
-- authentication and real RBAC
-- export to CSV or PDF
-- recurring transactions
-- budget goals and alerts
+## 📊 How Requirements Are Met
 
-## License
+| Requirement        | Implementation                  |
+| ------------------ | ------------------------------- |
+| Dashboard Overview | Summary cards + charts          |
+| Transactions       | Table with search, filter, sort |
+| Role-Based UI      | Admin/Viewer toggle             |
+| Insights           | Derived from transaction data   |
+| State Management   | Context API                     |
+| UI/UX              | Responsive + clean + animated   |
 
-This project is available for personal and educational use.
+---
+
+## 🚀 Possible Improvements
+
+* Backend/API integration
+* Authentication & real RBAC
+* Export to CSV/PDF
+* Budget tracking & alerts
+* Advanced analytics
+
+---
+
+## 📌 Important Note
+
+This project is built for evaluation purposes. It focuses on demonstrating **problem-solving, UI design, and frontend development skills**, rather than production-level completeness.
+
+---
+
+## 📄 License
+
+For personal and educational use.

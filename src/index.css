@@ -1,14 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap');
+﻿@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  color: #132238;
-  background: #f4efe7;
-  --bg: #f4efe7;
-  --sidebar: #102038;
   color-scheme: light;
 }
 
@@ -16,13 +12,38 @@ html.dark {
   color-scheme: dark;
 }
 
+@keyframes page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes card-enter {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.985);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
 @layer base {
   * {
-    @apply border-slate-200 dark:border-slate-800;
+    @apply border-slate-200/70 dark:border-white/10;
   }
 
   html {
     scroll-behavior: smooth;
+    background-color: #eef2ff;
   }
 
   body {
@@ -30,16 +51,16 @@ html.dark {
     min-height: 100vh;
     overflow-x: hidden;
     background:
-      radial-gradient(circle at top left, rgba(15, 118, 110, 0.14), transparent 28%),
-      radial-gradient(circle at top right, rgba(249, 115, 22, 0.14), transparent 32%),
-      linear-gradient(180deg, #f7f3eb 0%, #f4efe7 58%, #efe8dc 100%);
+      radial-gradient(circle at top left, rgba(99, 102, 241, 0.16), transparent 24%),
+      radial-gradient(circle at top right, rgba(16, 185, 129, 0.1), transparent 18%),
+      linear-gradient(180deg, #eef2ff 0%, #e8ecfb 54%, #e0e7ff 100%);
   }
 
   html.dark body {
     background:
-      radial-gradient(circle at top left, rgba(20, 184, 166, 0.16), transparent 26%),
-      radial-gradient(circle at top right, rgba(249, 115, 22, 0.12), transparent 24%),
-      linear-gradient(180deg, #020617 0%, #0f172a 52%, #111827 100%);
+      radial-gradient(circle at top left, rgba(99, 102, 241, 0.18), transparent 24%),
+      radial-gradient(circle at top right, rgba(16, 185, 129, 0.1), transparent 18%),
+      linear-gradient(180deg, #0a0f1e 0%, #0d1324 45%, #0b1020 100%);
   }
 
   #root {
@@ -50,26 +71,50 @@ html.dark {
 
 @layer components {
   .panel {
-    @apply rounded-[24px] border border-white/80 bg-white/80 shadow-panel backdrop-blur dark:border-slate-800/80 dark:bg-slate-900/80 sm:rounded-[28px];
+    @apply rounded-[28px] border border-slate-200/70 bg-white/90 shadow-panel backdrop-blur-xl dark:border-white/10 dark:bg-slate-900/80 dark:shadow-[0_28px_80px_-36px_rgba(99,102,241,0.28)];
   }
 
   .panel-muted {
-    @apply rounded-[24px] border border-slate-200/80 bg-white/65 backdrop-blur dark:border-slate-700/80 dark:bg-slate-950/70 sm:rounded-3xl;
+    @apply rounded-[24px] border border-slate-200/70 bg-white/75 backdrop-blur-xl dark:border-white/10 dark:bg-slate-900/65;
   }
 
-  .eyebrow {
-    @apply inline-flex items-center rounded-full border border-slate-200/80 bg-white/85 px-3 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-slate-500 dark:border-slate-700/70 dark:bg-slate-900/80 dark:text-slate-300;
+  .section-label {
+    @apply text-[11px] font-semibold uppercase tracking-[0.28em] text-slate-400 dark:text-slate-500;
   }
 
   .field {
-    @apply w-full rounded-2xl border border-slate-200/90 bg-white px-4 py-3 text-sm text-slate-700 outline-none transition duration-200 placeholder:text-slate-400 focus:border-aurora focus:ring-2 focus:ring-aurora/10 dark:border-slate-700/90 dark:bg-slate-950/80 dark:text-slate-100 dark:placeholder:text-slate-500;
+    @apply w-full rounded-2xl border border-slate-200/80 bg-white/90 px-4 py-3 text-sm text-slate-700 outline-none transition duration-200 placeholder:text-slate-400 focus:border-indigo-400 focus:ring-2 focus:ring-indigo-400/10 dark:border-white/10 dark:bg-slate-900/70 dark:text-slate-100 dark:placeholder:text-slate-500 dark:focus:border-indigo-400 dark:focus:ring-indigo-400/15;
   }
 
   .action-button {
     @apply inline-flex items-center justify-center rounded-2xl px-4 py-2.5 text-sm font-semibold transition duration-200;
   }
 
+  .page-shell {
+    animation: page-enter 0.36s ease both;
+  }
+
+  .card-entrance {
+    animation: card-enter 0.45s ease both;
+  }
+
+  .stagger-1 {
+    animation-delay: 0.04s;
+  }
+
+  .stagger-2 {
+    animation-delay: 0.08s;
+  }
+
+  .stagger-3 {
+    animation-delay: 0.12s;
+  }
+
+  .stagger-4 {
+    animation-delay: 0.16s;
+  }
+
   .chart-fallback {
-    @apply h-[240px] animate-pulse rounded-[24px] bg-slate-100/80 dark:bg-slate-800/60 sm:h-[290px];
+    @apply h-[260px] animate-pulse rounded-[26px] bg-slate-100/80 dark:bg-slate-800/70 sm:h-[320px];
   }
 }

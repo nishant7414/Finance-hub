@@ -1,0 +1,70 @@
+
+  [32m[1mVITE[22m v5.4.21[39m  [2mready in [0m[1m362[22m[2m[0m ms[22m
+
+  [32m➜[39m  [1mLocal[22m:   [36mhttp://127.0.0.1:[1m4174[22m/[39m
+[2m1:15:07 pm[22m [36m[1m[vite][22m[39m [32mpage reload [39m[2mtailwind.config.js[22m
+[2m1:15:07 pm[22m [36m[1m[vite][22m[39m [32mpage reload [39m[2mtailwind.config.js[22m
+[2m1:15:57 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/index.css[22m
+[2m1:16:35 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/context/FinanceContext.jsx, /src/index.css[22m
+[2m1:16:35 pm[22m [36m[1m[vite][22m[39m [33mhmr invalidate [39m[2m/src/context/FinanceContext.jsx[22m Could not Fast Refresh ("useFinance" export is incompatible). Learn more at https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#consistent-components-exports
+[2m1:16:35 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/App.jsx, /src/index.css, /src/pages/Dashboard.jsx, /src/components/Charts.jsx, /src/components/RoleSwitcher.jsx[22m
+[2m1:17:29 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/context/FinanceContext.jsx, /src/index.css[22m
+[2m1:17:29 pm[22m [36m[1m[vite][22m[39m [33mhmr invalidate [39m[2m/src/context/FinanceContext.jsx[22m Could not Fast Refresh ("useFinance" export is incompatible). Learn more at https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#consistent-components-exports
+[2m1:17:29 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/App.jsx, /src/index.css, /src/pages/Dashboard.jsx, /src/components/Charts.jsx, /src/components/RoleSwitcher.jsx[22m
+[2m1:18:26 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/context/FinanceContext.jsx, /src/index.css[22m
+[2m1:18:26 pm[22m [36m[1m[vite][22m[39m [33mhmr invalidate [39m[2m/src/context/FinanceContext.jsx[22m Could not Fast Refresh ("useFinance" export is incompatible). Learn more at https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#consistent-components-exports
+[2m1:18:26 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/App.jsx, /src/index.css, /src/pages/Dashboard.jsx, /src/components/Charts.jsx, /src/components/RoleSwitcher.jsx[22m
+[2m1:18:38 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/App.jsx, /src/index.css[22m
+[2m1:18:39 pm[22m [36m[1m[vite][22m[39m [32m✨ new dependencies optimized: [33mreact-router-dom[32m[39m
+[2m1:18:39 pm[22m [36m[1m[vite][22m[39m [32m✨ optimized dependencies changed. reloading[39m
+[2m1:19:11 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/RoleSwitcher.jsx, /src/index.css[22m
+[2m1:19:45 pm[22m [36m[1m[vite][22m[39m [32mpage reload [39m[2msrc/components/ThemeToggle.jsx[22m
+[2m1:21:05 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/Sidebar.jsx, /src/index.css[22m
+[2m1:21:58 pm[22m [36m[1m[vite][22m[39m [32mpage reload [39m[2msrc/components/AppShell.jsx[22m
+[2m1:23:25 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/SummaryCard.jsx, /src/index.css[22m
+[2m1:23:49 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/EmptyState.jsx, /src/index.css[22m
+[2m1:24:28 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/TransactionModal.jsx, /src/index.css[22m
+[2m1:25:28 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/Charts.jsx, /src/index.css[22m
+[2m1:25:29 pm[22m [36m[1m[vite][22m[39m [32m✨ new dependencies optimized: [33mrecharts/es6/chart/LineChart.js, recharts/es6/cartesian/Line.js[32m[39m
+[2m1:25:29 pm[22m [36m[1m[vite][22m[39m [32m✨ optimized dependencies changed. reloading[39m
+[2m1:27:21 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/TransactionTable.jsx, /src/index.css[22m
+[2m1:28:43 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/Dashboard.jsx, /src/index.css[22m
+[2m1:28:59 pm[22m [36m[1m[vite][22m[39m [32mpage reload [39m[2msrc/pages/Transactions.jsx[22m
+[2m1:29:08 pm[22m [36m[1m[vite][22m[39m [32mpage reload [39m[2msrc/pages/Insights.jsx[22m
+[2m1:30:18 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/index.css, /src/App.jsx[22m
+[2m1:30:19 pm[22m [36m[1m[vite][22m[39m [32m✨ new dependencies optimized: [33mrecharts/es6/chart/BarChart.js, recharts/es6/cartesian/Bar.js[32m[39m
+[2m1:30:19 pm[22m [36m[1m[vite][22m[39m [32m✨ optimized dependencies changed. reloading[39m
+[2m1:35:59 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/AppShell.jsx, /src/index.css[22m
+[2m1:35:59 pm[22m [36m[1m[vite][22m[39m [33mhmr invalidate [39m[2m/src/components/AppShell.jsx[22m Could not Fast Refresh ("useTransactionModalActions" export is incompatible). Learn more at https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#consistent-components-exports
+[2m1:35:59 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/index.css, /src/pages/Dashboard.jsx, /src/pages/Transactions.jsx, /src/App.jsx[22m
+[2m1:37:34 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/context/FinanceContext.jsx, /src/index.css[22m
+[2m1:37:34 pm[22m [36m[1m[vite][22m[39m [33mhmr invalidate [39m[2m/src/context/FinanceContext.jsx[22m Could not Fast Refresh ("useFinance" export is incompatible). Learn more at https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#consistent-components-exports
+[2m1:37:34 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/App.jsx, /src/index.css, /src/pages/Dashboard.jsx, /src/components/Charts.jsx, /src/components/RoleSwitcher.jsx, /src/components/AppShell.jsx, /src/components/ThemeToggle.jsx, /src/components/TransactionModal.jsx, /src/pages/Transactions.jsx, /src/pages/Insights.jsx, /src/components/InsightsPanel.jsx[22m
+[2m1:37:34 pm[22m [36m[1m[vite][22m[39m [33mhmr invalidate [39m[2m/src/components/AppShell.jsx[22m Could not Fast Refresh ("useTransactionModalActions" export is incompatible). Learn more at https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#consistent-components-exports
+[2m1:37:34 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/index.css, /src/pages/Dashboard.jsx, /src/pages/Transactions.jsx, /src/App.jsx[22m
+[2m1:38:23 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/context/FinanceContext.jsx, /src/index.css[22m
+[2m1:38:23 pm[22m [36m[1m[vite][22m[39m [33mhmr invalidate [39m[2m/src/context/FinanceContext.jsx[22m Could not Fast Refresh ("useFinance" export is incompatible). Learn more at https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#consistent-components-exports
+[2m1:38:23 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/App.jsx, /src/index.css, /src/pages/Dashboard.jsx, /src/components/Charts.jsx, /src/components/RoleSwitcher.jsx, /src/components/AppShell.jsx, /src/components/ThemeToggle.jsx, /src/components/TransactionModal.jsx, /src/pages/Transactions.jsx, /src/pages/Insights.jsx, /src/components/InsightsPanel.jsx[22m
+[2m1:38:23 pm[22m [36m[1m[vite][22m[39m [33mhmr invalidate [39m[2m/src/components/AppShell.jsx[22m Could not Fast Refresh ("useTransactionModalActions" export is incompatible). Learn more at https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#consistent-components-exports
+[2m1:38:23 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/index.css, /src/pages/Dashboard.jsx, /src/pages/Transactions.jsx, /src/App.jsx[22m
+[2m1:45:53 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/EmptyState.jsx, /src/index.css[22m
+[2m1:45:53 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/SummaryCard.jsx, /src/index.css[22m
+[2m1:49:36 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/SummaryCard.jsx, /src/index.css[22m
+[2m1:50:58 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/TransactionTable.jsx, /src/index.css[22m
+[2m1:51:40 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/TransactionModal.jsx, /src/index.css[22m
+[2m1:52:25 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/Dashboard.jsx, /src/index.css[22m
+[2m1:53:22 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/Charts.jsx, /src/index.css[22m
+[2m1:54:06 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/Sidebar.jsx, /src/index.css[22m
+[2m1:55:01 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/AppShell.jsx, /src/index.css[22m
+[2m1:55:27 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/RoleSwitcher.jsx, /src/index.css[22m
+[2m1:55:27 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/ThemeToggle.jsx, /src/index.css[22m
+[2m1:56:36 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/InsightsPanel.jsx, /src/index.css[22m
+[2m2:14:31 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/Dashboard.jsx, /src/index.css[22m
+[2m2:26:47 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/AppShell.jsx, /src/index.css[22m
+[2m2:28:36 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/Dashboard.jsx, /src/index.css[22m
+[2m2:28:42 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/Dashboard.jsx, /src/index.css[22m
+[2m2:33:18 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/Sidebar.jsx, /src/index.css[22m
+[2m2:44:30 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/Sidebar.jsx, /src/index.css[22m
+[2m2:44:41 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/Sidebar.jsx, /src/index.css[22m
+[2m2:45:02 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/Sidebar.jsx, /src/index.css[22m
+[2m2:46:32 pm[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/components/Sidebar.jsx, /src/index.css[22m
