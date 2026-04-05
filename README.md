@@ -141,10 +141,11 @@ src/
     insights.js
   App.jsx
   main.jsx
+````
 
 ---
 
-## ⚙️ Getting Started
+### ⚙️ Getting Started
 
 ### Installation
 
@@ -232,3 +233,4 @@ This project is built for evaluation purposes. It focuses on demonstrating **pro
 ## 📄 License
 
 For personal and educational use.
+
